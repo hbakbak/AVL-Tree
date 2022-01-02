@@ -1,0 +1,416 @@
+new
+insert 6 1
+insert -6 1
+insert -11 1
+insert -18 1
+erase -6 1
+insert -2 1
+insert 17 1
+insert -9 1
+insert -12 1
+insert -8 1
+erase 6 1
+delete
+summary
+details
+
+template <typename Type>
+bool Search_tree<Type>::Node::insert( Type const &obj, Search_tree<Type>::Node *&to_this ) {
+	if ( obj < node_value ) {
+		if ( left_tree == nullptr ) {
+			left_tree = new Search_tree<Type>::Node( obj );
+			left_tree -> next_node = front(); 
+			left_tree -> previous_node = nullptr; 
+			if((front())!=nullptr){
+				front()->previous_node = left_tree; 
+			}
+			//front() = left_tree;
+			update_height();
+			return true;
+		} else {
+			if ( left_tree->insert( obj, left_tree ) ) {
+				update_height();
+				balanceNode(to_this);
+				left_tree->next_node=previous_node->next_node; 
+				previous_node->next_node=left_tree; 
+				left_tree->previous_node=previous_node; 
+				if(left_tree->next_node){
+					left_tree->next_node->previous_node=left_tree;
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else if ( obj > node_value ) {
+		if ( right_tree == nullptr ) {
+			right_tree = new Search_tree<Type>::Node( obj );
+			right_tree->next_node= nullptr; 
+			left_tree -> previous_node = back(); 
+			update_height();
+			return true;
+		} else {
+			if ( right_tree->insert( obj, right_tree ) ) {
+				Node *temp_head = new Search_tree<Type>::Node();
+				temp_head = front(); 
+				update_height();
+				balanceNode(to_this);
+				while (temp_head != nullptr){
+					temp_head = temp_head -> next_node; 
+				}
+				temp_head -> next_node= right_tree;
+				right_tree -> previous_node = temp_head; 
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+}
+ ---new---- 
+
+template <typename Type>
+bool Search_tree<Type>::Node::insert( Type const &obj, Search_tree<Type>::Node *&to_this ) {
+	if ( obj < node_value ) {
+		if ( left_tree == nullptr ) {
+			left_tree = new Search_tree<Type>::Node( obj );
+			if(left_tree->previous_node == nullptr){ 
+				left_tree = new Search_tree<Type>::Node( obj );
+				left_tree -> next_node = front(); 
+				left_tree -> previous_node = nullptr; 
+				if(front() != nullptr){
+					front() -> previous_node = left_tree;
+				}
+				front() -> next_node = left_tree;
+			}
+			else { 
+				left_tree = new Search_tree<Type>::Node( obj );
+				Node *last_node = new Search_tree<Type>::Node();
+				last_node = front()
+				new_node -> next_node = previous_node -> next_node; 
+				previous_node -> next_node = left_tree;
+				left_tree -> previous_node = previous_node; 
+				if(left_tree -> next_node != nullptr){
+					left_tree->next_node->previous_node= left_tree;
+				}
+			}
+			Node *new_node =  new Search_tree<Type>::Node();
+			new_node -> next_node = previous_node -> next_node; 
+			previous_node -> next_node = new_node;
+			new_node -> previous_node = previous_node; 
+			left_tree = new Search_tree<Type>::Node( obj );
+			left_tree -> next_node = previous_node -> next_node; 
+			previous_node -> next_node = left_tree;
+			left_tree -> previous_node = previous_node; 
+
+			left_tree -> next_node = nullptr; 
+			left_tree -> previous_node = current_node; 
+			if((front())!=nullptr){
+				front()->previous_node = left_tree; 
+			}
+			//front() = left_tree;
+			update_height();
+			return true;
+		} else {
+			if ( left_tree->insert( obj, left_tree ) ) {
+				update_height();
+				balanceNode(to_this);
+				left_tree->next_node=previous_node->next_node; 
+				previous_node->next_node=left_tree; 
+				left_tree->previous_node=previous_node; 
+				if(left_tree->next_node){
+					left_tree->next_node->previous_node=left_tree;
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else if ( obj > node_value ) {
+		if ( right_tree == nullptr ) {
+			right_tree = new Search_tree<Type>::Node( obj );
+			right_tree->next_node= nullptr; 
+			left_tree -> previous_node = back(); 
+			update_height();
+			return true;
+		} else {
+			if ( right_tree->insert( obj, right_tree ) ) {
+				Node *temp_head = new Search_tree<Type>::Node();
+				temp_head = front(); 
+				update_height();
+				balanceNode(to_this);
+				while (temp_head != nullptr){
+					temp_head = temp_head -> next_node; 
+				}
+				temp_head -> next_node= right_tree;
+				right_tree -> previous_node = temp_head; 
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+}
+
+
+
+    Node *front_sentinel = new Search_tree<Type>::Node();
+	front_sentinel = nullptr; 
+	Node *back_sentinel = new Search_tree<Type>::Node();
+	back_sentinel = nullptr; 
+     headTail(root_node,front_sentinel,back_sentinel);
+     while(front_sentinel!=nullptr){
+         if(front_sentinel->node_value==data){
+             succ=front_sentinel->right_tree;
+             return;
+         }
+         else if(front_sentinel->node_value<data){
+             pred=front_sentinel;
+             front_sentinel=front_sentinel->right_tree;
+         }
+         else{
+             pred=nullptr;
+             return;
+         }
+     }
+
+
+
+
+	 --new
+	 while(root_node){
+ 		if (root_node->node_value == data)
+    {
+        if (root_node->left_tree != nullptr)
+        {
+            Node* temp = root_node->left_tree;
+            while (temp->right_tree)
+                temp = temp->right_tree;
+            pred = temp ;
+        }
+
+        if (root_node->right_tree != nullptr)
+        {
+            Node* temp = root_node->right_tree ;
+            while (temp->left_tree)
+                temp = temp->left_tree ;
+            succ = temp ;
+        }
+        break;
+    }
+ 
+    if (root_node->node_value > data)
+    {
+        succ = root_node ;
+        root_node=root_node->left_tree;
+    }
+    else 
+    {
+        pred = root_node ;
+        root_node=root_node->right_tree;
+ 		
+ 	}
+
+	 }
+
+
+
+	 ---newtemplate <typename Type>
+bool Search_tree<Type>::Node::insert( Type const &obj, Search_tree<Type>::Node *&to_this ) {
+
+	if ( obj < node_value ) {
+		if ( left_tree == nullptr ) {
+			left_tree = new Search_tree<Type>::Node( obj );
+			balanceNode(to_this);
+			getPredSucc(to_this, succ, pred, obj);
+			succ-> previous_node = left_tree; 
+			left_tree->next_node=succ;
+			if(pred){
+				pred-> next_node = left_tree;
+				left_tree->previous_node = pred; 
+			}
+			
+
+			update_height();
+			return true;
+		} else {
+			if ( left_tree->insert( obj, left_tree ) ) {
+				balanceNode(to_this);
+				getPredSucc(to_this, succ, pred, obj);
+				succ-> previous_node = left_tree; 
+				pred-> next_node = left_tree;
+				left_tree->previous_node = pred; 
+				left_tree->next_node=succ;
+				update_height();
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else if ( obj > node_value ) {
+		if ( right_tree == nullptr ) {
+			right_tree = new Search_tree<Type>::Node( obj );
+			balanceNode(to_this);
+			getPredSucc(to_this, succ, pred, obj);
+			pred-> next_node = right_tree;
+			right_tree->previous_node = pred; 
+
+			//succ-> previous_node = left_tree; 
+			if(pred){
+				succ-> previous_node = right_tree; 
+				right_tree->next_node=succ;
+			}
+			
+			
+			//balanceNode(to_this);
+			update_height();
+
+			return true;
+		} else {
+			if ( right_tree->insert( obj, right_tree ) ) {
+				balanceNode(to_this);
+				getPredSucc(to_this, succ, pred, obj);
+				succ-> previous_node = right_tree; 
+				pred-> next_node = right_tree;
+
+				right_tree->previous_node = pred; 
+				right_tree->next_node=succ;
+
+			   // getPredSucc(root_node, obj);
+			   //getSucc(root_node, obj);
+				update_height();
+				return true;
+			} else {
+				return false;
+			}
+		}
+	} else {
+		return false;
+	}
+}
+
+template <typename Type>
+bool Search_tree<Type>::Node::erase( Type const &obj, Search_tree<Type>::Node *&to_this ) {
+	if ( obj < node_value ) {
+		if ( left_tree == nullptr ) {
+			return false;
+		} else {
+			if ( left_tree->erase( obj, left_tree ) ) {
+				update_height();
+				return true;
+			}
+
+			return false;
+		}
+	} else if ( obj > node_value ) {
+		if ( right_tree == nullptr ) {
+			return false;
+		} else {
+			if ( right_tree->erase( obj, right_tree ) ) {
+				update_height();
+				return true;
+			}
+
+			return false;
+		}
+	} else {
+		assert( obj == node_value );
+
+		if ( is_leaf() ) {
+			to_this = nullptr;
+			delete this;
+		} else if ( left_tree == nullptr ) {
+			to_this = right_tree;
+			delete this;
+		} else if ( right_tree == nullptr ) {
+			to_this = left_tree;
+			delete this;
+		} else {
+			node_value = right_tree->front()->node_value;
+			right_tree->erase( node_value, right_tree );
+			update_height();
+		}
+
+		return true;
+	}
+}
+
+
+
+
+template <typename Type>
+void Search_tree<Type>::Node::getPredSucc(Node *root_node, Node*& succ, Node*& pred, int data){
+ if (root_node == nullptr) {
+	 return;
+ }
+        if (root_node->node_value == data) { 
+            if (root_node->right_tree) { 
+				struct Node *temp = root_node -> right_tree;
+                //root_node->succ = root_node->right_tree; 
+                while (temp->left_tree) 
+                    temp = temp->left_tree; 
+				succ = temp;
+            } 
+            if (root_node->left_tree) { 
+				struct Node *temp = root_node -> left_tree;
+                //root_node->pred = root_node->left_tree; 
+                while (temp->right_tree) 
+                    temp= temp->right_tree; 
+				pred = temp;
+            } 
+            return; 
+        } 
+        if (root_node->node_value < data) { 
+			pred = root_node; 
+			getPredSucc(root_node -> right_tree, succ, pred, data);
+        } 
+        else { 
+			succ = root_node; 
+			getPredSucc(root_node -> left_tree, succ, pred, data);
+        } 
+    }
+
+
+
+
+	template <typename Type>
+void Search_tree<Type>::Node::getPredSucc(Node *&root_node, Node*& succ, Node*& pred, int data){
+ if (root_node == nullptr) {
+	 return;
+ }
+    while (root_node != nullptr) { 
+        if (root_node->node_value == data) { 
+            if (root_node->right_tree) { 
+                root_node->succ = root_node->right_tree; 
+                while (succ->left_tree) 
+                    root_node->succ = succ->left_tree; 
+            } 
+			else if(root_node->right_tree == nullptr){
+				root_node->succ= back();
+			}
+            if (root_node->left_tree) { 
+                root_node->pred = root_node->left_tree; 
+                while (pred->right_tree) 
+                    root_node->pred= pred->right_tree; 
+            } 
+			else if(root_node->left_tree == nullptr){
+				root_node->pred= front();
+			}
+            return; 
+        } 
+        else if (root_node->node_value < data) { 
+           root_node->pred = root_node; 
+        	root_node = root_node->right_tree; 
+        } 
+        else { 
+            root_node->succ = root_node; 
+            root_node = root_node->left_tree; 
+        } 
+    } 
+
+ 	
+}
